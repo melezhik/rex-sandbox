@@ -1,0 +1,21 @@
+sparrow:
+    system:
+        - checkname: disk
+          plugin: df-check
+          settings:
+              threshold: 44
+        - checkname: nginx
+          plugin: nginx-check
+          settings:
+              check_master_age: 0
+              master_age: 60
+        - checkname: nginx-404-errors
+          plugin: logdog
+          settings:
+              file: /var/log/nginx/access.log
+              time_pattern: \[(\d+\/\S+\/\d+):(\S+)
+              time_format: %d/%b/%Y %T
+              history: 5 minutes
+              timezone: UTC
+              filter: HTTP\/\S+?"\s+404\s
+              key_field: (\S+)
